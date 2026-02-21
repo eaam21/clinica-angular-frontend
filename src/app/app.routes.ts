@@ -1,7 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { Login } from './login/login';
-import { NgModule } from '@angular/core';
+import { Inicio } from './inicio/inicio';
 
 export const routes: Routes = [
       { path: '', component: Login },
+      { path: 'inicio', component: Inicio },
 ];

@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { UsuarioService } from '../services/UsuarioService';
+import { LoginOutput } from '../model/Usuario';
 
 @Component({
   selector: 'app-login',
@@ -21,8 +23,26 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login { 
-  credenciales = { usuario: '', clave: '' };
+  credenciales = { nombreUsuario: '', claveUsuario: '' };
+    private usuarioService = inject(UsuarioService);
 
-  onSubmit(){}
+  onSubmit(){
+    this.usuarioService.login(this.credenciales).subscribe({
+      next:(response:LoginOutput)=>{
+        if(response.success){
+          sessionStorage.setItem("token", response.data);
+          console.log(response)
+          console.log("Login correcto!")
+          //this.router.navigate(['/inicio']);
+        }else{
+          console.log("Login incorrecto")
+          //this.openSnackBarLoginIncorrecto(response.respuesta);
+        }
+      },
+      error:(err)=>{
+        console.error('Login failed', err);
+      }
+    })
+  }
 
 }
