@@ -8,6 +8,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { PacienteService } from '../services/PacienteService';
 import { Paciente } from '../model/Paciente';
 import { JwtDecoderService } from '../services/JwtDecoderService';
+import { ConfirmarDialog } from '../ConfirmarDialog/ConfirmarDialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-inicio',
@@ -19,6 +21,7 @@ import { JwtDecoderService } from '../services/JwtDecoderService';
 export class Inicio {
     private pacienteService = inject(PacienteService);
     private jwtDecoder = inject(JwtDecoderService);
+      private dialog = inject(MatDialog);
     displayedColumns: string[] = ['idPaciente', 'apellidoPaterno', 'apellidoMaterno', 'nombres', 'dni', 'imc', 'acciones'];
     @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
     @ViewChild(MatTable,{static:true}) table!: MatTable<any>;
@@ -29,7 +32,6 @@ export class Inicio {
       this.decodedToken = this.jwtDecoder.decodeToken()
       this.listar();
     }
-
 
     listar(){
       this.pacienteService.listar().subscribe(
@@ -42,5 +44,23 @@ export class Inicio {
         }
       )
     }
+
+  eliminar(idPaciente: number): void {
+    const dialogRef = this.dialog.open(ConfirmarDialog);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        /*
+        this.pacienteService.eliminar(idPaciente).subscribe(
+          (paciente)=>{
+            if(paciente!=undefined){
+              this.listar();
+              this.openSnackBarEliminar();
+            }
+          }
+        )
+        */
+      }
+    });
+  }
 
  }
