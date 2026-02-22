@@ -7,6 +7,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { UsuarioService } from '../services/UsuarioService';
 import { LoginOutput } from '../model/Usuario';
+import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +27,10 @@ import { LoginOutput } from '../model/Usuario';
 export class Login { 
   credenciales = { nombreUsuario: '', claveUsuario: '' };
     private usuarioService = inject(UsuarioService);
+    private router = inject(Router);
+    private snackBar = inject(MatSnackBar);
+    horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
 
   onSubmit(){
     this.usuarioService.login(this.credenciales).subscribe({
@@ -33,10 +39,10 @@ export class Login {
           sessionStorage.setItem("token", response.data);
           console.log(response)
           console.log("Login correcto!")
-          //this.router.navigate(['/inicio']);
+          this.router.navigate(['/inicio']);
         }else{
           console.log("Login incorrecto")
-          //this.openSnackBarLoginIncorrecto(response.respuesta);
+          this.openSnackBarLoginIncorrecto(response.mensaje);
         }
       },
       error:(err)=>{
@@ -45,4 +51,11 @@ export class Login {
     })
   }
 
+  openSnackBarLoginIncorrecto(mensaje:string) {
+    this.snackBar.open(mensaje, 'OK', {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+      duration:4000
+    });
+  }
 }

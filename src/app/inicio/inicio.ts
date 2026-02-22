@@ -17,7 +17,7 @@ import { Paciente } from '../model/Paciente';
 })
 export class Inicio {
     private pacienteService = inject(PacienteService);
-    displayedColumns: string[] = ['idPaciente', 'apellidoPaterno', 'apellidoMaterno', 'nombres', 'dni', 'imc', 'idEspecialidad', 'acciones'];
+    displayedColumns: string[] = ['idPaciente', 'apellidoPaterno', 'apellidoMaterno', 'nombres', 'dni', 'imc', 'acciones'];
     @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
     @ViewChild(MatTable,{static:true}) table!: MatTable<any>;
     dataSource:any;
@@ -29,8 +29,11 @@ export class Inicio {
 
     listar(){
       this.pacienteService.listar().subscribe(
-        (paciente)=>{
-          this.dataSource = new MatTableDataSource<Paciente>(paciente)
+        (pacientes)=>{
+                  console.log("--------")
+        console.log(pacientes)
+        console.log("--------")
+          this.dataSource = new MatTableDataSource<Paciente>(pacientes)
           this.dataSource.paginator=this.paginator
         }
       )

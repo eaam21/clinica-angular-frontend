@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Paciente } from '../model/Paciente';
 
@@ -11,6 +11,11 @@ export class PacienteService {
   constructor() { }
 
   listar(){
-        return this.http.get<Paciente[]>(`${this.baseUrl}/listar`)
+    let token = sessionStorage.getItem("token");
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // Pass token in Authorization header
+    });
+    return this.http.get<Paciente[]>(`${this.baseUrl}/listar`, { headers })
   }
 }
